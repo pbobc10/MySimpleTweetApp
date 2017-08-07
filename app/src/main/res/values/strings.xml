@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SimpleTweets</string>
+    <string name="login_label">Connect to Twitter</string>
+    <string name="intent_scheme">oauth</string>
+    <string name="intent_host">codepathtweets</string>
+    <string name="title_activity_timeline">Home Time Line</string>
+    <string name="actioin_settings">Setting</string>
+    <string name="hint">What\'s happening?</string>
+
+</resources>
