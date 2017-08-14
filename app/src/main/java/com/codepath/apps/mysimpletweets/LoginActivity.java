@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
@@ -18,12 +19,9 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		getSupportActionBar().setDisplayShowHomeEnabled(true);
-		getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-		getSupportActionBar().setDisplayUseLogoEnabled(true);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4099ff")));
+		Toolbar toolbar = (Toolbar) findViewById(R.id.myToolbar);
+		setSupportActionBar(toolbar);
+        //actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4099ff")));
 	}
 
 

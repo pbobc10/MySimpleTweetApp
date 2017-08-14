@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -30,6 +31,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
  */
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
+    String imageUrl = null;
 
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context,android.R.layout.simple_list_item_1,tweets);
@@ -42,7 +44,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         // 1. Get the tweet
-        Tweet tweet = this.getItem(position);
+        final Tweet tweet = this.getItem(position);
         // 2. find or inflate the template
         if (convertView == null) {
 
@@ -51,6 +53,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         // 3. find the subviews to fill with data the template
         ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
         ivProfileImage.setImageResource(0);
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),ProfileUsersActivity.class);
+                i.putExtra("screenName", tweet.getUser().getScreenName());
+                i.putExtra("uid", tweet.getUser().getUid());
+                TweetsArrayAdapter.this.getContext().startActivity(i);
+            }
+        });
+
         ImageView ivTweet = (ImageView) convertView.findViewById(R.id.ivTweet);
         ivTweet.setImageResource(0);
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
@@ -58,17 +70,19 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView relativeTimestamp = (TextView) convertView.findViewById(R.id.tvRelativeTimestamp);
         relativeTimestamp.setText(getRelativeTimeAgo(tweet.getCreateAt()));
         // 4. Populate data into the subviews
-        tvUserName.setText(tweet.getUser().getScreeName());
+        tvUserName.setText(tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
         ivProfileImage.setImageResource(android.R.color.transparent); // clear out the image for reclyed view
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).transform(new RoundedCornersTransformation(3, 3)).into(ivProfileImage);
 
         //tweet.getUser().getScreeName();
         //tweet.getMediaUrl();
+
         if(tweet.getMediaUrl().size()>0) {
             if(!TextUtils.isEmpty(tweet.getMediaUrl().get(0))) {
-                Picasso.with(getContext()).load(tweet.getMediaUrl().get(0)).transform(new RoundedCornersTransformation(10,10)).into(ivTweet);
-                tweet.getMediaUrl().clear();
+                imageUrl = tweet.getMediaUrl().get(0);
+                ivTweet.setVisibility(View.VISIBLE);
+                Picasso.with(getContext()).load(imageUrl).transform(new RoundedCornersTransformation(10,10)).into(ivTweet);
             }
         }
         // 5. Return the view to be inserted into the list

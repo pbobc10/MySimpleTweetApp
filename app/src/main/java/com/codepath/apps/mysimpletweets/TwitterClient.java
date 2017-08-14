@@ -7,6 +7,7 @@ import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -51,14 +52,14 @@ public class TwitterClient extends OAuthBaseClient {
 	//	count=25
 	//	since_id = 1
 	//	define the endpoints which you want to retrieve data from or send data to within your client:
-	public  void geHomeTimeLine(int oldest, AsyncHttpResponseHandler handler){
+	public  void getHomeTimeLine(int oldest, AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count",25);
-        if (oldest == 1){
-			params.put("since_id",oldest);
+        if (oldest == 0){
+			params.put("since_id",1);
 		}else {
-			params.put("since_id", 5);
+			params.put("since_id", 1);
 		}
 
 		getClient().get(apiUrl,params,handler);
@@ -80,6 +81,36 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("status", body);
 		getClient().post(apiUrl, params, handler);
 	}
+
+	public void getMentionsTimeLine(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("count",25);
+		getClient().get(apiUrl,params,handler);
+	}
+
+	public  void getUserTimeline(String screenName,AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("count",25);
+		params.put("screen_name",screenName);
+		getClient().get(apiUrl,params,handler);
+	}
+
+	public  void getUserInfo(AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		getClient().get(apiUrl,null,handler);
+	}
+
+
+	public  void getUserInfoProfile(String screenName, long uid, AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("users/show.json");
+		RequestParams params = new RequestParams();
+		params.put("screen_name",screenName);
+		params.put("user_id",uid);
+		getClient().get(apiUrl,params,handler);
+	}
+
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");
